@@ -40,7 +40,7 @@ export default function CategoriesPage() {
           </div>
         )}
         <form onSubmit={handleAdd} className="space-y-3">
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label className="block text-xs font-medium text-slate-600 mb-1">
                 Нэр *
@@ -83,6 +83,7 @@ export default function CategoriesPage() {
           <h2 className="font-semibold text-slate-800">Ангилалууд</h2>
           <span className="text-xs text-slate-400">{categories.length} ангилал</span>
         </div>
+        <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
             <tr className="text-left text-xs text-slate-500 uppercase bg-slate-50 border-b border-slate-100">
@@ -127,6 +128,7 @@ export default function CategoriesPage() {
             })}
           </tbody>
         </table>
+        </div>
       </div>
     </div>
   );

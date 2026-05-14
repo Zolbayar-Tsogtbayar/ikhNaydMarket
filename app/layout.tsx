@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Sidebar from "./components/Sidebar";
-import TopBar from "./components/TopBar";
 import { StoreProvider } from "./lib/StoreContext";
+import ClientLayout from "./components/ClientLayout";
 
 export const metadata: Metadata = {
   title: "ikhNayd Market",
@@ -18,11 +17,7 @@ export default function RootLayout({
     <html lang="mn">
       <body>
         <StoreProvider>
-          <Sidebar />
-          <div className="ml-60 min-h-screen bg-[#f1f5f9]">
-            <TopBar />
-            <main className="p-6">{children}</main>
-          </div>
+          <ClientLayout>{children}</ClientLayout>
         </StoreProvider>
       </body>
     </html>

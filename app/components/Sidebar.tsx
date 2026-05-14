@@ -42,11 +42,24 @@ const NAV = [
   },
 ];
 
-export default function Sidebar() {
+export default function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
   const path = usePathname();
 
   return (
-    <aside className="fixed left-0 top-0 h-screen w-60 bg-[#0f172a] flex flex-col z-50 shadow-xl">
+    <aside
+      className={`fixed left-0 top-0 h-screen w-60 bg-[#0f172a] flex flex-col z-50 shadow-xl transition-transform duration-300
+        ${open ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}
+    >
+      <button
+        onClick={onClose}
+        className="absolute right-3 top-3 p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 md:hidden"
+        aria-label="Хаах"
+      >
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+
       <div className="px-6 py-5 border-b border-white/10">
         <div className="flex items-center gap-2">
           <div className="w-2 h-6 bg-[#D32F2F] rounded-full" />
@@ -64,6 +77,7 @@ export default function Sidebar() {
             <Link
               key={href}
               href={href}
+              onClick={onClose}
               className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all ${
                 active
                   ? "bg-[#D32F2F] text-white shadow-md"
