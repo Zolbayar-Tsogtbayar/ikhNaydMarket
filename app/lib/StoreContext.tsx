@@ -1,13 +1,14 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
-import type { Brand, Category, Product } from "./types";
+import type { BoothOwner, Brand, Category, Product } from "./types";
 import { DEFAULT_BRANDS, DEFAULT_CATEGORIES, DEFAULT_PRODUCTS } from "./defaults";
 
 const KEYS = {
   products: "ikm_products",
   categories: "ikm_categories",
   brands: "ikm_brands",
+  boothOwners: "ikm_booth_owners",
 };
 
 function load<T>(key: string, fallback: T[]): T[] {
@@ -24,6 +25,7 @@ type StoreCtx = {
   products: Product[];
   categories: Category[];
   brands: Brand[];
+  boothOwners: BoothOwner[];
   addProduct: (p: Omit<Product, "id" | "createdAt">) => void;
   updateProduct: (id: string, p: Partial<Omit<Product, "id">>) => void;
   deleteProduct: (id: string) => void;
@@ -31,6 +33,9 @@ type StoreCtx = {
   deleteCategory: (id: string) => void;
   addBrand: (name: string, slug: string) => void;
   deleteBrand: (id: string) => void;
+  addBoothOwner: (o: Omit<BoothOwner, "id" | "registrationDate">) => void;
+  updateBoothOwner: (id: string, o: Partial<Omit<BoothOwner, "id">>) => void;
+  deleteBoothOwner: (id: string) => void;
 };
 
 const StoreContext = createContext<StoreCtx | null>(null);
@@ -39,12 +44,14 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [brands, setBrands] = useState<Brand[]>([]);
+  const [boothOwners, setBoothOwners] = useState<BoothOwner[]>([]);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
     setProducts(load(KEYS.products, DEFAULT_PRODUCTS));
     setCategories(load(KEYS.categories, DEFAULT_CATEGORIES));
     setBrands(load(KEYS.brands, DEFAULT_BRANDS));
+    setBoothOwners(load(KEYS.boothOwners, []));
     setReady(true);
   }, []);
 
@@ -93,6 +100,27 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     save(KEYS.brands, next);
   }
 
+  function addBoothOwner(o: Omit<BoothOwner, "id" | "registrationDate">) {
+    const next = [
+      ...boothOwners,
+      { ...o, id: `bo${Date.now()}`, registrationDate: new Date().toISOString().slice(0, 10) },
+    ];
+    setBoothOwners(next);
+    save(KEYS.boothOwners, next);
+  }
+
+  function updateBoothOwner(id: string, o: Partial<Omit<BoothOwner, "id">>) {
+    const next = boothOwners.map((x) => (x.id === id ? { ...x, ...o } : x));
+    setBoothOwners(next);
+    save(KEYS.boothOwners, next);
+  }
+
+  function deleteBoothOwner(id: string) {
+    const next = boothOwners.filter((x) => x.id !== id);
+    setBoothOwners(next);
+    save(KEYS.boothOwners, next);
+  }
+
   if (!ready) return null;
 
   return (
@@ -101,6 +129,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         products,
         categories,
         brands,
+        boothOwners,
         addProduct,
         updateProduct,
         deleteProduct,
@@ -108,6 +137,9 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         deleteCategory,
         addBrand,
         deleteBrand,
+        addBoothOwner,
+        updateBoothOwner,
+        deleteBoothOwner,
       }}
     >
       {children}

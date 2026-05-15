@@ -8,12 +8,15 @@ const TITLES: Record<string, string> = {
   "/products/add": "Бүтээгдэхүүн нэмэх",
   "/categories": "Ангилал",
   "/brands": "Брэнд",
+  "/booth-owners": "Сандал эзэмшигч",
 };
 
 export default function TopBar({ onMenuClick }: { onMenuClick: () => void }) {
   const path = usePathname();
   const title =
-    TITLES[path] ?? (path.includes("/edit") ? "Бүтээгдэхүүн засах" : "");
+    TITLES[path] ??
+    (path.includes("/edit") ? "Бүтээгдэхүүн засах" :
+     path.startsWith("/booth-owners/") ? "Эзэмшигчийн профайл" : "");
 
   return (
     <header className="h-14 bg-white border-b border-slate-200 flex items-center px-4 md:px-6 sticky top-0 z-40 shadow-sm">

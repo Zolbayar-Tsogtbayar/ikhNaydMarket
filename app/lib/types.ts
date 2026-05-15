@@ -25,3 +25,15 @@ export type Brand = {
   name: string;
   slug: string;
 };
+
+export type BoothOwner = {
+  id: string;
+  name: string;
+  phone: string;
+  email?: string;
+  boothNumber: string;
+  boothLocation: string;
+  marketSection?: string;
+  registrationDate: string;
+  notes?: string;
+};
